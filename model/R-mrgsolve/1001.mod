@@ -18,6 +18,7 @@ THETA14 = -0.702
 THETA15 = 0.918
 THETA16 = -0.720
 THETA17 = 0.731
+THETA18 = -0.230
 
 IETA1 = 0
 IETA2 = 0
@@ -38,12 +39,14 @@ BCRCL = 0
 BWT = 0
 BALB = 0
 BAGE = 0
+BBMI = 0
 
 
 $CMT GUT CENT PERIPH AUC
 
 
 $MAIN
+double OBESE = 0;
 double HEP = 0;
 double FED = 0;
 double ECOG = 0;
@@ -55,6 +58,7 @@ double ALB = 4;
 
 
 //covariate effects
+if(BBMI > 30) OBESE = 1;
 if(BHFC>0) HEP = BHFC;
 if(FED > 0) FED = FOOD;
 if(BECOG > 0) ECOG = BECOG;
@@ -95,7 +99,7 @@ double TVKA = THETA5 * (1 + FED*THETA6);
 double KA = TVKA*exp(ETA5);
 
 F_GUT = F1;
-double F1 = 1 + FED*THETA7;
+double F1 = 1 + FED*THETA7 + OBESE*THETA18;
 
 $OMEGA @block @labels ETA1 ETA2
 0.107
