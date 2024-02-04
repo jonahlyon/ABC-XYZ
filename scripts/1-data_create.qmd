@@ -10,6 +10,7 @@ format:
     colorlinks: true
 ---
 
+The purpose of this script is to create a dataset with an imaginary patient population for a future study.
 
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
 renv::snapshot()
@@ -28,14 +29,14 @@ derDir <- "../data/derived/dose_histories"
 
 ```
 
-# 1. Load in PopPK Model Run for ABC-XYZ
+# Load PopPK Model Run for ABC-XYZ
 ```{r}
 mod1 <- mread("../model/R-mrgsolve/1001.mod", 
               start = 0, end = 120, delta = 1)
 
 ```
 
-# 2. Create population
+# Create population
 - Study of N = 120
 - pancreatic cancer (HV = 0)
 - ECOG of 0 (45%) and 1 (55%)
