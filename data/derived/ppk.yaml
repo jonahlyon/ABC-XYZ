@@ -1,0 +1,35 @@
+SETUP__:
+     description: ABC-XYZ PopPK Data Spec
+     lookup_file: lookup.yaml
+C:
+LINE:
+STUDY:
+ID:
+ATFD:
+ATLD:
+NTFD:
+NTLD:
+AMT:
+DV:
+LDV:
+EVID:
+CMT:
+MDV:
+BLQ:
+LLOQ:
+DOSEA:
+DOSEN:
+BWT:
+BHT:
+BBMI:
+BAGE:
+SEXF:
+RACEN:
+PTYPE:
+BECOG:
+BALB:
+BCRCL:
+BHFC:
+REGN:
+FOOD:
+USUBJID:

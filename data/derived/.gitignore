@@ -1,2 +1,5 @@
 *
 !.gitignore
+!*.csv
+!dose_histories/
+!*.yaml

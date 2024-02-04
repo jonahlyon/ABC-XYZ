@@ -1,0 +1,121 @@
+C:
+  long: commented rows
+  values: [".",C]
+  decode: [analysis row, commented row]
+  type: character
+CFLAG:
+  long: commented rows description
+  type: character
+LINE:
+  long: row number
+MDV:
+  long: missing dependent variable flag
+  values: {non-missing: 0, missing: 1}
+EVID:
+  long: event ID number
+  values: {"observation event": 0, "dose event": 1}
+CMT:
+  long: NONMEM compartment number
+  type: numeric
+BWT:
+  short: weight
+  long: patient weight
+  about: [Weight, kg]
+  type: numeric
+  range: {30, 180}
+BHT:
+  short: height
+  long: patient height
+  about: [Height, m]
+  type: numeric
+BAGE:
+  short: age
+  long: patient age
+  about: [Age, years]
+  range: {20, 100}
+BECOG:
+  long: patient baseline ECOG score
+  type: numeric
+USUBJID:
+  long: unique subject identifier
+  type: character
+STUDY:
+  long: abbreviated study number
+  type: numeric
+AMT:
+  long: dose amount
+  type: numeric
+  unit: mg
+BLQ:
+  long: below limit of quantification flag
+  type: numeric
+  values: {"non-BLQ or dose": 0, "post-dose BLQ": 1, "pre-dose BLQ": 2}
+LLOQ:
+  long: lower limit of quantification
+  type: numeric
+BBMI:
+  long: baseline BMI
+  unit: "kg/m^2"
+  type: numeric
+  range: {15, 50}
+ATFD:
+  short: actual time since first dose
+  unit: hours
+ATLD:
+  short: actual time since last dose
+  unit: hours
+NTFD:
+  short: nominal time since first dose
+  unit: hours
+NTLD:
+  short: nominal time since last dose
+  unit: hours
+DV:
+  short: dependent variable
+  type: numeric
+  unit: ng/mL
+LDV:
+  short: log dependent variable
+  type: numeric
+  unit: log(ng/mL)
+BCRCL:
+  short: baseline creatinine clearance
+  long: baseline creatinine clearance (cockroft-gauld eqn)
+  type: numeric
+  unit: mL/min
+  range: {20, 180}
+ID:
+  short: subject ID number
+  type: numeric
+DOSEA:
+  short: subject actual dose
+  type: numeric
+  unit: mg
+DOSEN:
+  short: subject nominal dose
+  type: numeric
+  unit: mg
+SEXF:
+  short: subject sex
+  values: {male: 0, female: 1}
+RACEN:
+  short: subject race
+  values: {white: 1, black: 2, asian: 3, other: 4}
+PTYPE:
+  short: patient type
+  values: {healthy volunteer: 0, pancreatic cancer: 4}
+BALB:
+  short: baseline ablumin
+  type: numeric
+  unit: g/dL
+BHFC:
+  short: baseline hepatic function
+  values: {normal: 0, mild: 1, moderate: 2}
+REGN:
+  short: regimen
+  type: numeric
+  values: {QD: 1, QOD: 2}
+FOOD:
+  short: food status
+  values: {fasted: 0, fed: 1, unknown: 2}
+
