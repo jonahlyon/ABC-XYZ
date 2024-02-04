@@ -1,0 +1,6 @@
+pre-commit:
+  scripts:
+    "file-size":
+      runner: bash
+    "conflict":
+      runner: bash

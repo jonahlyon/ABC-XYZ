@@ -1,0 +1,15 @@
+Package: internal
+Title: Internal package of helper functions
+Version: 0.0.0.9000
+Authors@R: 
+    person("a2ai", "package", , "package@a2-ai.com", role = c("aut", "cre"))
+Description: Internal helper package.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    brio,
+    fs,
+    processx,
+    withr
