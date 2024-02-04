@@ -107,7 +107,7 @@ $OMEGA @labels ETA3 ETA4 ETA5
 1.34
 
 $SIGMA @labels PROP ADD
-0.007 4.3
+0.009 20.4
 
 $ODE
 dxdt_GUT = -KA*GUT;

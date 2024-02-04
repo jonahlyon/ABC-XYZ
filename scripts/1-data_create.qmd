@@ -169,8 +169,8 @@ digest::digest(doses_demogs) |> print()
 
 
 # Test Simulation Run (validate dataset for use in mrgsolve and NONMEM)
-
-```{r}
+Note - hourly saampling is meant to demonstrate variability in PK samples, not show an example study design.
+```{r, warning = FALSE}
 # validate test for simulation wiht dataset
 sim1 <- mrgsim_df(mod1,
                   data = doses_demogs |> 
