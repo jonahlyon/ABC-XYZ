@@ -1,0 +1,161 @@
+---
+title: "ABC-XYZ Premise and Dataset Creation"
+author: Jonah Lyon (jonah@a2-ai.com)
+date: today
+date-format: long
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+---
+
+The purpose of this script is to use the imaginary patient population from the previous step to simulate out some simmed "real" concentrations using the PopPK model with samples from a proposed study design.  500 replicate simulations will be created so that in the next step, we can obtain a sufficient range of estimates that can be considered for the given study design.
+
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
+renv::snapshot()
+```
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(mrgsolve)
+library(yspec)
+
+# data spec yaml file
+spec <- ys_load("../data/derived/ppk.yaml")
+derDir <- "../data/derived/dose_histories"
+base_data <- read_csv(file.path(derDir, "subject_demog_dose.csv"), na = ".")
+
+# UPDATE if new simulation estimation iteration
+simdatDir <- "../model/nonmem/simest1"
+
+```
+
+# Load PopPK Model Run for ABC-XYZ
+```{r}
+mod1 <- mread("../model/R-mrgsolve/1001.mod", 
+              start = 0, end = 120, delta = 1)
+
+```
+
+# Proposed Study Design
+- C1D1 Samples: pre-dose, 0.5, 1, 12
+- C1D15 Samples: pre-dose
+- C2D1 Samples: pre-dose, 0.5, 1, 12
+- C2D15 Samples: pre-dose
+- C3D1, C4D1 Samples: pre-dose
+## General Schedule Creating
+```{r}
+# create generalized PK schedule
+pk_samp_sched <- 
+  data.frame(
+    TPT = c(-0.083, 0.5, 1, 12)
+    ) |> 
+  crossing(
+    DAY = c(1, 15, 29, 43, 57, 85)
+  ) |> 
+  filter(ifelse(DAY == 15 | DAY > 29, TPT == -0.083, TRUE)) |> 
+  arrange(DAY, TPT) |> 
+  mutate(
+    NTFD = (DAY-1)*24 + TPT
+  )
+
+```
+## Apply schedule to each subject
+```{r}
+usubjid <- base_data |> distinct(USUBJID, ID)
+
+# apply schedule for all subjects
+pk_times <- usubjid |> 
+  crossing(pk_samp_sched) |> 
+  mutate(
+    EVID = 0,
+    CMT = 2,
+    DV = NA_integer_,
+  )
+
+```
+
+# NONMEM-style dataset (for simulation with mrgsolve)
+## One Iteration Dataset
+```{r}
+
+pk_itr1 <- base_data |> 
+  bind_rows(pk_times) |> 
+  arrange(USUBJID, NTFD) |> 
+  mutate(
+    NTLD = ifelse(NTFD > 0 & TPT < 0, TPT + 48, TPT),
+    NTLD = ifelse(EVID == 1, 0, NTLD),
+    ATFD = NTFD,
+    ATLD = NTLD
+  ) |> 
+  group_by(USUBJID) |> 
+  fill(c(STUDY, ID, LLOQ, DOSEA, DOSEN, BWT, BHT, BBMI, BAGE, SEXF, RACEN,
+         PTYPE, BECOG, BALB, BCRCL, BHFC, REGN, FOOD), .direction = "downup") |> 
+  select(-DAY, -TPT) |> 
+  ungroup() |> 
+  arrange(ID, ATFD)
+
+```
+
+## Iterate Dataset 500 times
+```{r}
+n <- length(unique(pk_itr1$USUBJID))
+
+pk_itr500 <- pk_itr1 |> 
+  crossing(SIM = 1:500) |> # 500 replicate sims
+  mutate(
+    ID = ID + (SIM-1)*n # rename id to get new sim iteration (e.g. ETAs are resimulated)
+  ) |> 
+  arrange(ID, ATFD)
+
+```
+
+# Simulation
+## Simulate and Post-Process
+```{r}
+pk_sim <- mrgsim_df(mod1, 
+          pk_itr500 |> rename(TIME = ATFD),
+          carry_out = names(pk_itr500))
+
+pk_sim1 <- pk_sim |> 
+  mutate(
+    ID = ID - (SIM-1)*n, # rename ID back to compare variability allowed for any one given subject
+    ATFD = TIME,
+    LDV = log(DV),
+    C = ifelse(ATFD < 0, "C", NA_integer_),
+    DV = round(ifelse(Y>0 & EVID == 0, Y, NA_integer_), 2)
+  ) |> 
+  left_join(usubjid, by = "ID") |> 
+  select(names(spec), SIM)
+
+```
+
+## Example Subject - ID 47, first 10 sims
+```{r}
+example_47 <- pk_sim1 |> 
+  filter(ID == 47, SIM %in% 1:10, EVID == 0) |>
+  mutate(SIM = as.factor(SIM))
+
+ggplot(example_47, aes(ATFD, DV, group = SIM, col = SIM)) +
+  geom_point() + 
+  geom_line()
+
+```
+
+```{r}
+
+n <- 500
+walk(seq(n), function(q){
+  data_itr_name <- str_c("sim", q, ".csv")
+  
+  temp <- pk_sim1 |> filter(SIM == q)
+  
+  write_csv(temp, file.path(simdatDir, data_itr_name), na = ".")
+})
+
+```
+
+

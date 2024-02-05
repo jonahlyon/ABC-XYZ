@@ -10,7 +10,7 @@ format:
     colorlinks: true
 ---
 
-The purpose of this script is to create a dataset with an imaginary patient population for a future study.
+The purpose of this script is to create a dataset with an imaginary patient population for the future study.  This script will randomly simulate using both random normal distributions and sampling with replacement with specified probabilities.  A seed will be set so that the same population can be used for replication purposes.
 
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
 renv::snapshot()

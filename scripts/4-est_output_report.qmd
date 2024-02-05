@@ -1,0 +1,38 @@
+---
+title: "ABC-XYZ Premise and Dataset Creation"
+author: Jonah Lyon (jonah@a2-ai.com)
+date: today
+date-format: long
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+---
+
+The purpose of this script is to use the imaginary patient population from the previous step to simulate out some "real" concentrations using the PopPK model under the proposed study design.  500 replicate simulations will be created so that in the next step, we can obtain a healthy range of estimates that can be considered for the given study design.  From the 500 estimates, % bias can be reported.
+
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
+renv::snapshot()
+```
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(mrgsolve)
+library(yspec)
+
+# data spec yaml file
+spec <- ys_load("../data/derived/ppk.yaml")
+derDir <- "../data/derived/dose_histories"
+base_data <- read_csv(file.path(derDir, "subject_demog_dose.csv"), na = ".")
+
+```
+
+# Load PopPK Model Run for ABC-XYZ
+```{r}
+mod1 <- mread("../model/R-mrgsolve/1001.mod", 
+              start = 0, end = 120, delta = 1)
+
+```

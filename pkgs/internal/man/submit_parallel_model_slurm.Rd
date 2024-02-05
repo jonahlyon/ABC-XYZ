@@ -6,7 +6,7 @@
 \usage{
 submit_parallel_model_slurm(
   .mod,
-  partition = "cpu4",
+  partition = "cpu4mem16gb",
   ncpu = 4,
   overwrite = FALSE,
   slurm_job_template_path = .dh$slurm_job_template_path,
