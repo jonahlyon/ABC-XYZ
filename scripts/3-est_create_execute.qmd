@@ -195,7 +195,7 @@ template_ctl <- read_file(file.path(simdatDir, "temp.mod"))
 n <- 500
 walk(seq(n), function(q, overwrite = TRUE){
   
-  mod_name <- q
+  mod_name <- str_c("sim", q)
   mod_path <- glue("{simdatDir}/{mod_name}")
   
   if(file.exists(paste0(mod_path, ".yaml")) && !overwrite) {
