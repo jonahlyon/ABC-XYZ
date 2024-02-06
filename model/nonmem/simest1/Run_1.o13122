@@ -1,6 +1,0 @@
-time="2024-02-05T21:27:25Z" level=info msg="Successfully loaded default configuration from /cluster-data/user-homes/jonah/repo/jonahlyon/ABC-XYZ/model/nonmem/simest1/bbi.yaml"
-time="2024-02-05T21:27:25Z" level=info msg="Beginning Local Path"
-time="2024-02-05T21:27:25Z" level=info msg="A total of 1 models have completed the initial preparation phase"
-time="2024-02-05T21:27:25Z" level=info msg="[1] No Nonmem output files detected in /cluster-data/user-homes/jonah/repo/jonahlyon/ABC-XYZ/model/nonmem/simest1/1. Good to continue"
-time="2024-02-05T21:27:25Z" level=info msg="[1] Beginning local work phase"
-slurmstepd: error: *** JOB 13122 ON cpu2mem4gb-dy-c6i-large-1 CANCELLED AT 2024-02-05T21:35:02 ***
