@@ -126,7 +126,9 @@ pk_sim1 <- pk_sim |>
     ATFD = TIME,
     LDV = log(DV),
     C = ifelse(ATFD < 0, "C", NA_integer_),
-    DV = round(ifelse(Y>0 & EVID == 0, Y, NA_integer_), 2)
+    DV = round(ifelse(Y>0 & EVID == 0, Y, NA_integer_), 2),
+    AMT = ifelse(EVID == 0, NA_integer_, AMT),
+    MDV = ifelse(!is.na(DV), 0, 1)
   ) |> 
   left_join(usubjid, by = "ID") |> 
   select(names(spec), SIM)
