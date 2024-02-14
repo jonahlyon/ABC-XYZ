@@ -36,3 +36,32 @@ mod1 <- mread("../model/R-mrgsolve/1001.mod",
               start = 0, end = 120, delta = 1)
 
 ```
+
+
+
+
+```{r}
+
+ref <- param(mod1) |> 
+  as.data.frame()
+
+simest_df <- param_estimates_batch("../model/nonmem/simest1") |> 
+  mutate(
+    sim = as.numeric(str_extract(run, "\\d+"))
+  ) |> 
+  arrange(sim) |> 
+  select(sim, error_msg, THETA1, THETA2) |> 
+  mutate(
+    REFTHETA1 = ref$THETA1,
+    REFTHETA2 = ref$THETA2,
+    CLBIAS = (THETA1 - REFTHETA1)/REFTHETA1*100,
+    VCBIAS = (THETA2 - REFTHETA2)/REFTHETA2*100
+  ) |> 
+  pivot_longer(cols = CLBIAS:VCBIAS, names_to = "PARAM", values_to = "RESULT") |> 
+  mutate(PARAM = as.factor(PARAM))
+  
+
+ggplot(simest_df, aes(x = PARAM, y = RESULT)) + geom_boxplot()
+
+```
+

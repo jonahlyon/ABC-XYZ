@@ -51,7 +51,7 @@ mod1 <- mread("../model/R-mrgsolve/1001.mod",
 # create generalized PK schedule
 pk_samp_sched <- 
   data.frame(
-    TPT = c(-0.083, 0.5, 1, 12)
+    TPT = c(-0.083, 0.5, 1, 2, 4, 12)
     ) |> 
   crossing(
     DAY = c(1, 15, 29, 43, 57, 85)
@@ -153,7 +153,8 @@ n <- 500
 walk(seq(n), function(q){
   data_itr_name <- str_c("sim", q, ".csv")
   
-  temp <- pk_sim1 |> filter(SIM == q)
+  temp <- pk_sim1 |> filter(SIM == q) |> 
+    ungroup() |> mutate(LINE = row_number())
   
   write_csv(temp, file.path(simdatDir, data_itr_name), na = ".")
 })
