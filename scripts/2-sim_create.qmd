@@ -137,12 +137,14 @@ pk_sim1 <- pk_sim |>
 
 ## Example Subject - ID 47, first 10 sims
 ```{r}
+
+theme_set(theme_bw())
 example_47 <- pk_sim1 |> 
   filter(ID == 47, SIM %in% 1:10, EVID == 0) |>
   mutate(SIM = as.factor(SIM))
 
 ggplot(example_47, aes(ATFD, DV, group = SIM, col = SIM)) +
-  geom_point() + 
+  geom_point(shape = 1) + 
   geom_line() + 
   ggtitle("Subject 47 Concentration-Time Profile Across 10 Replicate Simulations") + 
   xlab("Time Since First Dose (hours)") + 
