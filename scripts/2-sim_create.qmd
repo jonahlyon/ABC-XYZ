@@ -143,7 +143,10 @@ example_47 <- pk_sim1 |>
 
 ggplot(example_47, aes(ATFD, DV, group = SIM, col = SIM)) +
   geom_point() + 
-  geom_line()
+  geom_line() + 
+  ggtitle("Subject 47 Concentration-Time Profile Across 10 Replicate Simulations") + 
+  xlab("Time Since First Dose (hours)") + 
+  ylab("ABC-XYZ Concentration (µg/mL)")
 
 ```
 

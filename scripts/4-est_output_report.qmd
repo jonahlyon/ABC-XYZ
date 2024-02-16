@@ -22,6 +22,7 @@ renv::snapshot()
 library(tidyverse)
 library(mrgsolve)
 library(yspec)
+library(bbr)
 
 # data spec yaml file
 spec <- ys_load("../data/derived/ppk.yaml")
@@ -41,6 +42,7 @@ mod1 <- mread("../model/R-mrgsolve/1001.mod",
 
 
 ```{r}
+theme_set(theme_bw())
 
 ref <- param(mod1) |> 
   as.data.frame()
@@ -58,10 +60,19 @@ simest_df <- param_estimates_batch("../model/nonmem/simest1") |>
     VCBIAS = (THETA2 - REFTHETA2)/REFTHETA2*100
   ) |> 
   pivot_longer(cols = CLBIAS:VCBIAS, names_to = "PARAM", values_to = "RESULT") |> 
-  mutate(PARAM = as.factor(PARAM))
+  mutate(
+    PARAM = ifelse(PARAM == "VCBIAS", "Central Volume", "Clearance"),
+    PARAM = as.factor(PARAM))
   
 
-ggplot(simest_df, aes(x = PARAM, y = RESULT)) + geom_boxplot()
+ggplot(simest_df, aes(x = PARAM, y = RESULT)) +
+  geom_hline(aes(yintercept = 20), linetype = "dashed", col = "darkred") + 
+  geom_hline(aes(yintercept = 0)) + 
+  geom_hline(aes(yintercept = -20), linetype = "dashed", col = "darkred") + 
+  geom_boxplot() +
+  ggtitle("Bias of 500 Parameter Estimates with the corresponding sampling schedule") + 
+  xlab("Parameter") + 
+  ylab("Bias compared to original model (%)")
 
 ```
 
